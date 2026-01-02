@@ -1,252 +1,41 @@
-index.html
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Placa Carder</title>
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #0b0b0b;
-    color: #fff;
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #e63946;
-}
-
-.container {
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
-}
-
-/* PRODUTOS */
-.produtos {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    flex: 2;
-}
-
-.produto {
-    background: #151515;
-    border-radius: 14px;
-    padding: 20px;
-    width: 230px;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.7);
-}
-
-.produto h2 {
-    margin-bottom: 10px;
-}
-
-.produto p {
-    font-size: 14px;
-    color: #bbb;
-    margin-bottom: 15px;
-}
-
-.produto span {
-    display: block;
-    font-size: 20px;
-    margin-bottom: 15px;
-    color: #e63946;
-    font-weight: bold;
-}
-
-.produto button {
-    background: #e63946;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 8px;
-    color: #fff;
-    cursor: pointer;
-}
-
-.produto button:hover {
-    background: #c1121f;
-}
-
-/* CARRINHO */
-#carrinho {
-    flex: 1;
-    background: #151515;
-    border-radius: 14px;
-    padding: 20px;
-}
-
-#carrinho h2 {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: 14px;
-}
-
-.item button {
-    background: #c1121f;
-    border: none;
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.total {
-    border-top: 1px solid #333;
-    padding-top: 10px;
-    margin-top: 15px;
-    text-align: center;
-    font-size: 18px;
-    color: #e63946;
-}
-
-.finalizar {
-    margin-top: 15px;
-    width: 100%;
-    padding: 10px;
-    background: #2a9d8f;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.finalizar:hover {
-    background: #21867a;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Placa Carder</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 
 <h1>Placa Carder</h1>
 
-<div class="container">
-
 <div class="produtos">
     <div class="produto">
-        <h2>Cartão Classic</h2>
-        <p>Ideal para iniciantes</p>
-        <span>R$ 150,00</span>
-        <button onclick="add('Classic',150)">Adicionar</button>
+        <h3>Cartão Classic</h3>
+        <p>R$ 50,00</p>
+        <button onclick="add('Classic', 50)">Adicionar</button>
     </div>
 
     <div class="produto">
-        <h2>Cartão Standard</h2>
-        <p>Mais limite e benefícios</p>
-        <span>R$ 250,00</span>
-        <button onclick="add('Standard',250)">Adicionar</button>
+        <h3>Cartão Gold</h3>
+        <p>R$ 80,00</p>
+        <button onclick="add('Gold', 80)">Adicionar</button>
     </div>
 
     <div class="produto">
-        <h2>Cartão Gold</h2>
-        <p>Perfil intermediário</p>
-        <span>R$ 400,00</span>
-        <button onclick="add('Gold',400)">Adicionar</button>
-    </div>
-
-    <div class="produto">
-        <h2>Cartão Platinum</h2>
-        <p>Alto limite e exclusividade</p>
-        <span>R$ 650,00</span>
-        <button onclick="add('Platinum',650)">Adicionar</button>
+        <h3>Cartão Platinum</h3>
+        <p>R$ 120,00</p>
+        <button onclick="add('Platinum', 120)">Adicionar</button>
     </div>
 </div>
 
 <div id="carrinho">
     <h2>Carrinho</h2>
     <div id="itens"></div>
-    <div class="total">
-        Total: R$ <span id="total">0.00</span>
-    </div>
-    <button class="finalizar" onclick="finalizar()">Finalizar Compra</button>
+    <p>Total: R$ <span id="total">0.00</span></p>
+    <button onclick="finalizar()">Finalizar Pedido</button>
 </div>
 
-</div>
-
-<script>
-let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-
-function salvar() {
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-    render();
-}
-
-function add(nome, preco) {
-    carrinho.push({nome, preco});
-    salvar();
-}
-
-function remover(index) {
-    carrinho.splice(index,1);
-    salvar();
-}
-
-function render() {
-    const itens = document.getElementById("itens");
-    const totalEl = document.getElementById("total");
-    itens.innerHTML = "";
-    let total = 0;
-
-    carrinho.forEach((item, i) => {
-        total += item.preco;
-        itens.innerHTML += `
-        <div class="item">
-            <span>${item.nome} - R$ ${item.preco.toFixed(2)}</span>
-            <button onclick="remover(${i})">X</button>
-        </div>`;
-    });
-
-    totalEl.innerText = total.toFixed(2);
-}
-
-function finalizar() {
-    if(carrinho.length === 0){
-        alert("Carrinho vazio!");
-        return;
-    }
-
-    let mensagem = "🛒 Pedido - Placa Carder\n\n";
-    let total = 0;
-
-    carrinho.forEach(item => {
-        mensagem += `• ${item.nome} - R$ ${item.preco.toFixed(2)}\n`;
-        total += item.preco;
-    });
-
-    mensagem += `\nTotal: R$ ${total.toFixed(2)}`;
-
-    const telefone = "55SEUNUMEROAQUI";
-    window.open(`https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`, "_blank");
-
-    carrinho = [];
-    salvar();
-}
-
-render();
-</script>
-
+<script src="js/script.js"></script>
 </body>
 </html>
